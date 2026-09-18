@@ -25,7 +25,7 @@ void loop() {
   const char text[] = "Yoooooooooooo";
   bool okkk = radio.write(&text, sizeof(text));
 
-  Serial.print("waitup sendin it");
+  Serial.print("waitup sendin it ");
   Serial.println(okkk ? "done" : "nah");
 
   delay(1000);
