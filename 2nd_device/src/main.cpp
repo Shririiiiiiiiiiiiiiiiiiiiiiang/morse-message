@@ -1,18 +1,32 @@
-#include <Arduino.h>
+#include <SPI.h>
+#include <RF24.h>
 
-// put function declarations here:
-int myFunction(int, int);
+RF24 radio(4, 5); // Both my esps are connected with the nrfs on this pin only the one seeing this may change it to any GPIO pins they want their nrf'sce and csn pin connected to
+
+const byte address[6] = "Range";
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(115200);
+
+  if(!radio.begin()) {
+    Serial.println("Radio is not responding pls checkkkk itttttttttt");
+  while (1) {}
+  }
+
+radio.openReadingPipe(0, address);
+radio.setPALevel(RF24_PA_LOW);
+radio.startListening();
+
+
+
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
+  if(radio.available()) {
+    char text[32] = ""; //keeping it 32 fr now as my mesages are small 
+    radio.read(&text, sizeof(text));
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+    Serial.print("Got the messagee:- ");
+    Serial.println(text);
+  }
 }
